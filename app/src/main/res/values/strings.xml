@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Breaking Bad Quotes</string>
+    <string name="app_name_short">BBQ</string>
 </resources>
