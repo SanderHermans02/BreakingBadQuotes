@@ -17,9 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.breakingbadquotes.R
+import com.example.breakingbadquotes.model.Quote
 
 @Composable
-fun QuoteItem(){
+fun QuoteItem(quote: Quote){
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
@@ -37,7 +38,7 @@ fun QuoteItem(){
                     .padding(dimensionResource(id = R.dimen.card_inside_space)) // Padding inside the card
             ) {
                 Text(
-                    text = "The fun’s over. From here on out, I’m Mr. Low Profile. Just another douche bag with a job and three pairs of Dockers. If I’m lucky, month from now, best-case scenario, I’m managing a Cinnabon in Omaha.",
+                    text = quote.quote,
                     style = MaterialTheme.typography.bodyLarge, // Adjust text style for readability
                     modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.quote_space)) // Spacing between the quote and the author
                 )
@@ -46,7 +47,7 @@ fun QuoteItem(){
                     horizontalArrangement = Arrangement.End
                 ){
                     Text(
-                        text = "Walter White",
+                        text = quote.author,
                         style = MaterialTheme.typography.bodyMedium // Adjust text style for the author
                     )
                 }
@@ -58,5 +59,9 @@ fun QuoteItem(){
 @Preview
 @Composable
 fun QuoteItemPreview(){
-    QuoteItem()
+    val sampleQuote = Quote(
+        quote = "I am the one who knocks!",
+        author = "Walter White"
+    )
+    QuoteItem(quote = sampleQuote)
 }
