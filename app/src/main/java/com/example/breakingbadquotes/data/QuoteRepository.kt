@@ -5,13 +5,14 @@ import com.example.breakingbadquotes.network.QuoteApiService
 import com.example.breakingbadquotes.network.asDomainObjects
 
 interface QuoteRepository {
-    suspend fun getQuote(): Quote
+    suspend fun getQuote(): List<Quote>
 }
 
 class ApiQuoteRepository(
     private val quoteApiService: QuoteApiService
 ): QuoteRepository {
-    override suspend fun getQuote(): Quote {
-        return quoteApiService.getQuote().asDomainObjects()
+    override suspend fun getQuote(): List<Quote> {
+        return quoteApiService.getQuotes().map { it.asDomainObjects() }
     }
 }
+

@@ -29,8 +29,14 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
     fun getQuote() {
         viewModelScope.launch {
             quoteState = try {
-                val quote = quoteRepository.getQuote()
-                QuoteState.Success(quote)
+                val quotes = quoteRepository.getQuote() // This is now a List<Quote>
+                if (quotes.isNotEmpty()) {
+                    // If the list is not empty, take the first quote
+                    QuoteState.Success(quotes.first())
+                } else {
+                    // Handle the case where the list is empty
+                    QuoteState.Error // You might want to introduce a specific empty state
+                }
             } catch (ex: IOException) {
                 QuoteState.NoInternet
             } catch (e: Exception) {

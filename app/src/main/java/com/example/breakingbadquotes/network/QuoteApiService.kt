@@ -4,5 +4,5 @@ import retrofit2.http.GET
 
 interface QuoteApiService {
     @GET("quotes")
-    suspend fun getQuote(): ApiQuote
+    suspend fun getQuotes(): List<ApiQuote>
 }
