@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 
 class FavoritesViewModel : ViewModel() {
     init {
-        Log.i("vm inspection", "AboutViewModel init")
+        Log.i("vm inspection", "FavoritesViewModel init")
     }
 
     override fun onCleared() {
         super.onCleared()
-        Log.i("vm inspection", "AboutViewModel cleared")
+        Log.i("vm inspection", "FavoritesViewModel cleared")
     }
 }

@@ -10,7 +10,7 @@ interface QuoteRepository {
 
 class ApiQuoteRepository(
     private val quoteApiService: QuoteApiService
-): QuoteRepository{
+): QuoteRepository {
     override suspend fun getQuote(): Quote {
         return quoteApiService.getQuote().asDomainObjects()
     }

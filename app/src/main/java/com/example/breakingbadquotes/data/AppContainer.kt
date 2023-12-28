@@ -20,7 +20,7 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         .addInterceptor(networkCheck)
         .build()
 
-    private val baseUrl = "https://api.breakingbadquotes.xyz/v1/quotes"
+    private val baseUrl = "https://api.breakingbadquotes.xyz/v1/"
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(
             Json.asConverterFactory("application/json".toMediaType()),
