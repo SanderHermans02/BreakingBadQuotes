@@ -1,6 +1,5 @@
 package com.example.breakingbadquotes.ui.quoteScreen
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,35 +12,61 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.breakingbadquotes.QuoteApplication
 import com.example.breakingbadquotes.data.QuoteRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.breakingbadquotes.model.Quote
+import com.example.breakingbadquotes.ui.states.QuoteApiState
+import com.example.breakingbadquotes.ui.states.QuoteState
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
-    var quoteState: QuoteState by mutableStateOf(QuoteState.Loading)
+    var quoteApiState: QuoteApiState by mutableStateOf(QuoteApiState.Loading)
         private set
-
+    var quoteState: QuoteState by mutableStateOf(QuoteState(false))
+        private set
+    var listOfQuotes: List<Quote> by mutableStateOf(mutableListOf())
+        private set
     init {
         getQuote()
         Log.i("vm inspection", "QuoteViewModel init")
     }
+
+    fun addFavorite(quote: Quote) {
+        viewModelScope.launch {
+            try {
+                listOfQuotes = listOfQuotes.updated(listOfQuotes.indexOf(quote), Quote(quote.quote, quote.author, true))
+                quoteRepository.insertQuote(quote)
+            } catch (ex: Exception) {
+                Log.e("QuoteViewModel", ex.message.toString())
+            }
+        }
+    }
+
+    fun removeFavorite(quote: Quote) {
+        viewModelScope.launch {
+            try {
+                listOfQuotes = listOfQuotes.updated(listOfQuotes.indexOf(quote), Quote(quote.quote, quote.author, false))
+                quoteRepository.deleteQuote(quote)
+            } catch (ex: Exception) {
+                Log.e("QuoteViewModel", ex.message.toString())
+            }
+        }
+    }
+
     fun getQuote() {
         viewModelScope.launch {
-            quoteState = try {
-                val quotes = quoteRepository.getQuote() // This is now a List<Quote>
+            quoteApiState = try {
+                val quotes = quoteRepository.getQuote()
                 if (quotes.isNotEmpty()) {
-                    // If the list is not empty, take the first quote
-                    QuoteState.Success(quotes.first())
+                    QuoteApiState.Success(quotes.first())
                 } else {
-                    // Handle the case where the list is empty
-                    QuoteState.Error // You might want to introduce a specific empty state
+                    QuoteApiState.Error
                 }
             } catch (ex: IOException) {
-                QuoteState.NoInternet
+                QuoteApiState.NoInternet
             } catch (e: Exception) {
                 Log.e("QuoteViewModel", e.message.toString())
-                QuoteState.Error
+                QuoteApiState.Error
             }
         }
     }
@@ -60,3 +85,5 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
         }
     }
 }
+
+fun <E> Iterable<E>.updated(index: Int, elem: E) = mapIndexed { i, existing -> if (i == index) elem else existing }

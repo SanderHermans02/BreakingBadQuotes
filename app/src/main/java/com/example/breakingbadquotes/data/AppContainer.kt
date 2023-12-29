@@ -1,6 +1,7 @@
 package com.example.breakingbadquotes.data
 
 import android.content.Context
+import com.example.breakingbadquotes.data.database.QuoteDb
 import com.example.breakingbadquotes.network.NetworkConnectionInterceptor
 import com.example.breakingbadquotes.network.QuoteApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -33,7 +34,11 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         retrofit.create(QuoteApiService::class.java)
     }
 
-    override val quoteRepository: QuoteRepository by lazy {
+    /*override val quoteRepository: QuoteRepository by lazy {
         ApiQuoteRepository(retrofitService)
+    }*/
+
+    override val quoteRepository: QuoteRepository by lazy {
+        CachingQuotesRepository(QuoteDb.getDatabase(context = context).quoteDao(), retrofitService, context)
     }
 }
