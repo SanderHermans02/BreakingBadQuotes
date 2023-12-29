@@ -8,4 +8,6 @@
     <dimen name="column_spacer">4dp</dimen>
     <dimen name="quote_space">12dp</dimen>
     <dimen name="card_inside_space">16dp</dimen>
+    <dimen name="button_space">16dp</dimen>
+    <dimen name="title_space">16dp</dimen>
 </resources>
