@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Breaking Bad Quotes</string>
     <string name="app_name_short">BBQ</string>
+    <string name="loading">loading...</string>
+    <string name="error_message">Something went wrong</string>
+    <string name="no_internet">Walter! U need internet connection, Walter!</string>
 </resources>

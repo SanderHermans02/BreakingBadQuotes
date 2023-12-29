@@ -2,4 +2,10 @@
 <resources>
     <dimen name="icon_size">24dp</dimen>
     <dimen name="padding_screen_borders">12dp</dimen>
+    <dimen name="quote_card_padding">32dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_space">16dp</dimen>
+    <dimen name="column_spacer">4dp</dimen>
+    <dimen name="quote_space">12dp</dimen>
+    <dimen name="card_inside_space">16dp</dimen>
 </resources>
