@@ -17,14 +17,12 @@ interface QuoteRepository {
     suspend fun insertQuote(quote: Quote)
 
     suspend fun deleteQuote(quote: Quote)
-
-
 }
 class CachingQuotesRepository(
     private val quoteDao: QuoteDao,
     private val quoteApiService: QuoteApiService,
-    context: Context
-): QuoteRepository {
+    context: Context,
+) : QuoteRepository {
     override fun getFavoriteQuotes(): Flow<List<Quote>> {
         return quoteDao.getAllItems().map { it.asDomainQuotes() }
     }
@@ -49,4 +47,3 @@ class CachingQuotesRepository(
         return quoteApiService.getQuotes().map { it.asDomainObjects() }
     }
 }*/
-

@@ -12,7 +12,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.breakingbadquotes.QuoteApplication
 import com.example.breakingbadquotes.data.QuoteRepository
 import com.example.breakingbadquotes.model.Quote
-import com.example.breakingbadquotes.ui.quoteScreen.QuoteViewModel
 import com.example.breakingbadquotes.ui.states.QuoteApiState
 import com.example.breakingbadquotes.ui.states.QuoteDbState
 import kotlinx.coroutines.flow.SharingStarted

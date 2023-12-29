@@ -11,16 +11,13 @@ import java.io.IOException
 
 class NetworkConnectionInterceptor(val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = chain.run {
-        if(!isConnected(context=context)){
+        if (!isConnected(context=context)) {
             Log.i("retrofit", "there is no connection")
             throw IOException()
-
-        }
-        else {
+        } else {
             val builder = chain.request().newBuilder()
             return@run chain.proceed(builder.build())
         }
-
     }
 
     fun isConnected(context: Context): Boolean {
@@ -46,7 +43,6 @@ class NetworkConnectionInterceptor(val context: Context) : Interceptor {
                         ConnectivityManager.TYPE_ETHERNET -> true
                         else -> false
                     }
-
                 }
             }
         }

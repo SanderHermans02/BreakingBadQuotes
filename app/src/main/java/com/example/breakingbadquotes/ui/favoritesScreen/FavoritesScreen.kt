@@ -3,8 +3,6 @@ package com.example.breakingbadquotes.ui.favoritesScreen
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.breakingbadquotes.ui.quoteScreen.QuoteViewModel
-import com.example.breakingbadquotes.ui.states.QuoteApiState
 import com.example.breakingbadquotes.ui.states.QuoteDbState
 
 @Composable

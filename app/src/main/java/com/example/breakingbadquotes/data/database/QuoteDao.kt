@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface QuoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(item: dbQuote)
+    suspend fun insert(item: DbQuote)
 
     @Delete
-    suspend fun delete(item: dbQuote)
+    suspend fun delete(item: DbQuote)
 
     @Query("SELECT * from favoriteQuotes")
-    fun getAllItems(): Flow<List<dbQuote>>
+    fun getAllItems(): Flow<List<DbQuote>>
 }

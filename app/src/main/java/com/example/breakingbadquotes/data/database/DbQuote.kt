@@ -5,27 +5,27 @@ import androidx.room.PrimaryKey
 import com.example.breakingbadquotes.model.Quote
 
 @Entity(tableName = "favoriteQuotes")
-data class dbQuote(
+data class DbQuote(
     @PrimaryKey
     val quote: String,
     val author: String,
 )
 
-fun dbQuote.asDomainQuote(): Quote {
+fun DbQuote.asDomainQuote(): Quote {
     return Quote(
         this.quote,
         this.author,
     )
 }
 
-fun Quote.asDbQuote(): dbQuote {
-    return dbQuote(
+fun Quote.asDbQuote(): DbQuote {
+    return DbQuote(
         quote = this.quote,
         author = this.author,
     )
 }
 
-fun List<dbQuote>.asDomainQuotes(): List<Quote> {
+fun List<DbQuote>.asDomainQuotes(): List<Quote> {
     var quoteList = this.map {
         Quote(it.quote, it.author)
     }
