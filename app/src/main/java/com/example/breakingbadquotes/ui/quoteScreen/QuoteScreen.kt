@@ -13,45 +13,52 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.ui.components.QuoteItem
+import com.example.breakingbadquotes.ui.states.QuoteApiState
 
 @Composable
 fun QuoteScreen() {
     val quoteViewModel: QuoteViewModel = viewModel(factory = QuoteViewModel.Factory)
-    val uiState = quoteViewModel.quoteState
+    val uiState = quoteViewModel.quoteApiState
+    val isFavorite = quoteViewModel.quoteState.isFavorite
     when (uiState) {
-        QuoteState.Loading -> {
+        is QuoteApiState.Loading -> {
             Text(text = stringResource(id = R.string.loading))
         }
-        is QuoteState.Success -> {
+        is QuoteApiState.Success -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(text = stringResource(id = R.string.quote_screen_title),
+                Text(
+                    text = stringResource(id = R.string.quote_screen_title),
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)))
-                QuoteItem(quote = uiState.quote)
-                Row (
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)),
+                )
+                QuoteItem(
+                    quote = uiState.quote,
+                    isFavorite = isFavorite,
+                    favoriteQuote = { quoteViewModel.addFavorite(uiState.quote) },
+                    unfavoriteQuote = { quoteViewModel.removeFavorite(uiState.quote) },
+                )
+                Row(
                     modifier = Modifier
                         .padding(dimensionResource(id = R.dimen.button_space))
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ){
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
                     Button(onClick = { quoteViewModel.getQuote() }) {
                         Text(text = stringResource(id = R.string.get_quote))
-
                     }
                 }
             }
         }
-        QuoteState.Error -> {
+        is QuoteApiState.Error -> {
             Text(text = stringResource(id = R.string.error_message))
         }
-        QuoteState.NoInternet -> {
+        is QuoteApiState.NoInternet -> {
             Text(text = stringResource(id = R.string.no_internet))
         }
     }

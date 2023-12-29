@@ -7,4 +7,6 @@
     <string name="get_quote">Generate Quote</string>
     <string name="add_to_favorites">Add To Favorites</string>
     <string name="quote_screen_title">Generate A Quote</string>
+    <string name="unfavorite_this_quote">unfavorite this quote</string>
+    <string name="favorite_this_quote">favorite this quote</string>
 </resources>
