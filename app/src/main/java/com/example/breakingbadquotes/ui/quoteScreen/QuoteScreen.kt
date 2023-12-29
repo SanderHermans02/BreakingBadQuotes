@@ -41,9 +41,6 @@ fun QuoteScreen() {
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ){
-                    Button(onClick = { /*TODO*/ }) {
-                        Text(text = stringResource(id = R.string.add_to_favorites))
-                    }
                     Button(onClick = { quoteViewModel.getQuote() }) {
                         Text(text = stringResource(id = R.string.get_quote))
 
