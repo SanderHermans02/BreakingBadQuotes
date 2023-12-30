@@ -25,12 +25,12 @@ fun QuoteScreen() {
     val quoteViewModel: QuoteViewModel = viewModel(factory = QuoteViewModel.Factory)
     val favoriteQuotes by quoteViewModel.favoriteQuotes.collectAsState()
     val uiState = quoteViewModel.quoteApiState
-    val isFavorite = quoteViewModel.quoteState.isFavorite
     when (uiState) {
         is QuoteApiState.Loading -> {
             Text(text = stringResource(id = R.string.loading))
         }
         is QuoteApiState.Success -> {
+            val isCurrentQuoteFavorite = favoriteQuotes.any { it.quote == uiState.quote.quote }
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween,
@@ -42,9 +42,9 @@ fun QuoteScreen() {
                 )
                 QuoteItem(
                     quote = uiState.quote,
-                    isFavorite = favoriteQuotes.any { it.quote == uiState.quote.quote },
+                    isFavorite = isCurrentQuoteFavorite,
                     onFavoriteClick = {
-                        if (isFavorite) {
+                        if (isCurrentQuoteFavorite) {
                             quoteViewModel.removeFavorite(uiState.quote)
                         } else {
                             quoteViewModel.addFavorite(uiState.quote)

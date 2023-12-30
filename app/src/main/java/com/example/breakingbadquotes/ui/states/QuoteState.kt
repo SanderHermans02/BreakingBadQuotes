@@ -2,9 +2,6 @@ package com.example.breakingbadquotes.ui.states
 
 import com.example.breakingbadquotes.model.Quote
 
-data class QuoteState(
-    val isFavorite: Boolean,
-)
 sealed interface QuoteApiState {
     data class Success(val quote: Quote) : QuoteApiState
     object Error : QuoteApiState
