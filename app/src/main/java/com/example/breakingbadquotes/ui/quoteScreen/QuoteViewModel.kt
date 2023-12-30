@@ -14,7 +14,9 @@ import com.example.breakingbadquotes.QuoteApplication
 import com.example.breakingbadquotes.data.QuoteRepository
 import com.example.breakingbadquotes.model.Quote
 import com.example.breakingbadquotes.ui.states.QuoteApiState
-import com.example.breakingbadquotes.ui.states.QuoteState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -22,20 +24,27 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
     var quoteApiState: QuoteApiState by mutableStateOf(QuoteApiState.Loading)
         private set
-    var quoteState: QuoteState by mutableStateOf(QuoteState(false))
-        private set
-    var listOfQuotes: List<Quote> by mutableStateOf(mutableListOf())
-        private set
+
+    private val _favoriteQuotes = MutableStateFlow<List<Quote>>(emptyList())
+    val favoriteQuotes: StateFlow<List<Quote>> = _favoriteQuotes.asStateFlow()
     init {
+        loadFavoriteQuotes()
         getQuote()
         Log.i("vm inspection", "QuoteViewModel init")
     }
 
+    private fun loadFavoriteQuotes() {
+        viewModelScope.launch {
+            quoteRepository.getFavoriteQuotes().collect { quotes ->
+                _favoriteQuotes.value = quotes
+            }
+        }
+    }
     fun addFavorite(quote: Quote) {
         viewModelScope.launch {
             try {
-                listOfQuotes = listOfQuotes.updated(listOfQuotes.indexOf(quote), Quote(quote.quote, quote.author, true))
                 quoteRepository.insertQuote(quote)
+                _favoriteQuotes.value = _favoriteQuotes.value + quote.copy(isFavorite = true)
             } catch (ex: Exception) {
                 Log.e("QuoteViewModel", ex.message.toString())
             }
@@ -44,12 +53,8 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
     fun removeFavorite(quote: Quote) {
         viewModelScope.launch {
-            try {
-                listOfQuotes = listOfQuotes.updated(listOfQuotes.indexOf(quote), Quote(quote.quote, quote.author, false))
-                quoteRepository.deleteQuote(quote)
-            } catch (ex: Exception) {
-                Log.e("QuoteViewModel", ex.message.toString())
-            }
+            quoteRepository.deleteQuote(quote)
+            _favoriteQuotes.value = _favoriteQuotes.value.filter { it.quote != quote.quote }
         }
     }
 
@@ -85,5 +90,3 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
         }
     }
 }
-
-fun <E> Iterable<E>.updated(index: Int, elem: E) = mapIndexed { i, existing -> if (i == index) elem else existing }

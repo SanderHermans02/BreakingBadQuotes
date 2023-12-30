@@ -9,25 +9,20 @@ data class DbQuote(
     @PrimaryKey
     val quote: String,
     val author: String,
+    val isFavorite: Boolean,
 )
-
-fun DbQuote.asDomainQuote(): Quote {
-    return Quote(
-        this.quote,
-        this.author,
-    )
-}
 
 fun Quote.asDbQuote(): DbQuote {
     return DbQuote(
-        quote = this.quote,
-        author = this.author,
+        quote = quote,
+        author = author,
+        isFavorite = isFavorite,
     )
 }
 
 fun List<DbQuote>.asDomainQuotes(): List<Quote> {
     var quoteList = this.map {
-        Quote(it.quote, it.author)
+        Quote(it.quote, it.author, it.isFavorite)
     }
     return quoteList
 }

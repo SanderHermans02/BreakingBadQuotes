@@ -9,4 +9,6 @@
     <string name="quote_screen_title">Generate A Quote</string>
     <string name="unfavorite_this_quote">unfavorite this quote</string>
     <string name="favorite_this_quote">favorite this quote</string>
+    <string name="favorites_screen_title">Favorite Quotes</string>
+    <string name="no_favorites">There are no favorited quotes.</string>
 </resources>

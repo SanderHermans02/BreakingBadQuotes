@@ -1,6 +1,7 @@
 package com.example.breakingbadquotes.data
 
 import android.content.Context
+import androidx.room.Room
 import com.example.breakingbadquotes.data.database.QuoteDb
 import com.example.breakingbadquotes.network.NetworkConnectionInterceptor
 import com.example.breakingbadquotes.network.QuoteApiService
@@ -14,9 +15,9 @@ interface AppContainer {
     val quoteRepository: QuoteRepository
 }
 
-class DefaultAppContainer(private val context: Context) : AppContainer {
+class DefaultAppContainer(applicationContext: Context) : AppContainer {
 
-    private val networkCheck = NetworkConnectionInterceptor(context)
+    private val networkCheck = NetworkConnectionInterceptor(applicationContext)
     private val client = OkHttpClient.Builder()
         .addInterceptor(networkCheck)
         .build()
@@ -38,7 +39,16 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         ApiQuoteRepository(retrofitService)
     }*/
 
+    private val quoteDatabase: QuoteDb by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            QuoteDb::class.java,
+            "database-name",
+        ).build()
+    }
+
     override val quoteRepository: QuoteRepository by lazy {
-        CachingQuotesRepository(QuoteDb.getDatabase(context = context).quoteDao(), retrofitService, context)
+//        ApiTasksRepository(retrofitService)
+        CachingQuotesRepository(quoteDatabase.quoteDao(), retrofitService)
     }
 }

@@ -23,7 +23,7 @@ import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.model.Quote
 
 @Composable
-fun QuoteItem(quote: Quote, isFavorite: Boolean, favoriteQuote: () -> Unit, unfavoriteQuote: () -> Unit) {
+fun QuoteItem(quote: Quote, isFavorite: Boolean, onFavoriteClick: (Quote) -> Unit) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation)),
         modifier = Modifier
@@ -51,20 +51,19 @@ fun QuoteItem(quote: Quote, isFavorite: Boolean, favoriteQuote: () -> Unit, unfa
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (isFavorite) {
-                    IconButton(onClick = { unfavoriteQuote() }) {
-                        Icon(
-                            Icons.Default.Favorite,
-                            contentDescription = stringResource(id = R.string.unfavorite_this_quote),
-                        )
-                    }
-                } else {
-                    IconButton(onClick = { favoriteQuote() }) {
-                        Icon(
-                            Icons.Default.FavoriteBorder,
-                            contentDescription = stringResource(id = R.string.favorite_this_quote),
-                        )
-                    }
+                IconButton(onClick = { onFavoriteClick(quote) }) {
+                    Icon(
+                        imageVector = if (isFavorite) {
+                            Icons.Default.Favorite
+                        } else {
+                            Icons.Default.FavoriteBorder
+                        },
+                        contentDescription = if (isFavorite) {
+                            stringResource(R.string.unfavorite_this_quote)
+                        } else {
+                            stringResource(R.string.favorite_this_quote)
+                        },
+                    )
                 }
                 Text(
                     text = quote.author,
