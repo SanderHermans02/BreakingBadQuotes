@@ -12,7 +12,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.breakingbadquotes.QuoteApplication
 import com.example.breakingbadquotes.data.QuoteRepository
 import com.example.breakingbadquotes.model.Quote
-import com.example.breakingbadquotes.ui.states.QuoteApiState
 import com.example.breakingbadquotes.ui.states.QuoteDbState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,18 +21,26 @@ import kotlinx.coroutines.launch
 class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
     lateinit var uiListState: StateFlow<List<Quote>>
-    var quoteApiState: QuoteApiState by mutableStateOf(QuoteApiState.Loading)
-        private set
 
     var quoteDbState: QuoteDbState by mutableStateOf(QuoteDbState.Loading)
         private set
     var listOfQuotes: List<Quote> by mutableStateOf(mutableListOf())
         private set
 
+    val favoriteQuotes: StateFlow<List<Quote>> = quoteRepository.getFavoriteQuotes()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     init {
         getFavoritesQuotes()
         Log.i("vm inspection", "FavoritesViewModel init")
     }
+
+    fun removeFavorite(quote: Quote) {
+        viewModelScope.launch {
+            quoteRepository.deleteQuote(quote)
+        }
+    }
+
     fun getFavoritesQuotes() {
         viewModelScope.launch {
             quoteDbState = try {

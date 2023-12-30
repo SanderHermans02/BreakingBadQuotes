@@ -1,6 +1,5 @@
 package com.example.breakingbadquotes.data
 
-import android.content.Context
 import com.example.breakingbadquotes.data.database.QuoteDao
 import com.example.breakingbadquotes.data.database.asDbQuote
 import com.example.breakingbadquotes.data.database.asDomainQuotes
@@ -21,7 +20,6 @@ interface QuoteRepository {
 class CachingQuotesRepository(
     private val quoteDao: QuoteDao,
     private val quoteApiService: QuoteApiService,
-    context: Context,
 ) : QuoteRepository {
     override fun getFavoriteQuotes(): Flow<List<Quote>> {
         return quoteDao.getAllItems().map { it.asDomainQuotes() }
