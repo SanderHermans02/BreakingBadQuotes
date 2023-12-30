@@ -35,7 +35,10 @@ fun FavoritesScreen() {
                 )
                 when {
                     favoriteQuotes.isEmpty() -> {
-                        Text(text = stringResource(id = R.string.no_favorites))
+                        Text(
+                            text = stringResource(id = R.string.no_favorites),
+                            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_space)),
+                        )
                     }
                     favoriteQuotes.isNotEmpty() -> {
                         LazyColumn {
