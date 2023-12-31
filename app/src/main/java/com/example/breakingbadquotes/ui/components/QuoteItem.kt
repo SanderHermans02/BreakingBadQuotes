@@ -23,11 +23,10 @@ import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.model.Quote
 
 @Composable
-fun QuoteItem(quote: Quote, isFavorite: Boolean, onFavoriteClick: (Quote) -> Unit) {
+fun QuoteItem(quote: Quote, isFavorite: Boolean, onFavoriteClick: (Quote) -> Unit, modifier: Modifier = Modifier) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation)),
         modifier = Modifier
-            .fillMaxWidth()
             .padding(dimensionResource(id = R.dimen.card_space)),
     ) {
         Column(

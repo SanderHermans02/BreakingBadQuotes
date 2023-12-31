@@ -11,4 +11,6 @@
     <string name="favorite_this_quote">favorite this quote</string>
     <string name="favorites_screen_title">Favorite Quotes</string>
     <string name="no_favorites">There are no favorited quotes.</string>
+    <string name="navigate_to_quotes">navigate to quote generator</string>
+    <string name="navigate_to_favorites">navigate to favorited quotes</string>
 </resources>
