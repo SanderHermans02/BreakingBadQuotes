@@ -1,67 +1,75 @@
 package com.example.breakingbadquotes.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.model.Quote
 
 @Composable
-fun QuoteItem(quote: Quote){
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
+fun QuoteItem(quote: Quote, isFavorite: Boolean, onFavoriteClick: (Quote) -> Unit) {
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(id = R.dimen.card_space)),
     ) {
-        Card(
-            elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation)),
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(id = R.dimen.card_space)) // Adjust padding for mobile screen
+                .padding(dimensionResource(id = R.dimen.card_inside_space)),
         ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(dimensionResource(id = R.dimen.card_inside_space)) // Padding inside the card
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
             ) {
                 Text(
                     text = quote.quote,
-                    style = MaterialTheme.typography.bodyLarge, // Adjust text style for readability
-                    modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.quote_space)) // Spacing between the quote and the author
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.quote_space)),
                 )
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ){
-                    Text(
-                        text = quote.author,
-                        style = MaterialTheme.typography.bodyMedium // Adjust text style for the author
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                IconButton(onClick = { onFavoriteClick(quote) }) {
+                    Icon(
+                        imageVector = if (isFavorite) {
+                            Icons.Default.Favorite
+                        } else {
+                            Icons.Default.FavoriteBorder
+                        },
+                        contentDescription = if (isFavorite) {
+                            stringResource(R.string.unfavorite_this_quote)
+                        } else {
+                            stringResource(R.string.favorite_this_quote)
+                        },
                     )
                 }
+                Text(
+                    text = quote.author,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun QuoteItemPreview(){
-    val sampleQuote = Quote(
-        quote = "I am the one who knocks!",
-        author = "Walter White"
-    )
-    QuoteItem(quote = sampleQuote)
 }

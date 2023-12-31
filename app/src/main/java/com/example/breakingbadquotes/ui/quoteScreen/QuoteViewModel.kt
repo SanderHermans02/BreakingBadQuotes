@@ -1,6 +1,5 @@
 package com.example.breakingbadquotes.ui.quoteScreen
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,35 +12,66 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.breakingbadquotes.QuoteApplication
 import com.example.breakingbadquotes.data.QuoteRepository
+import com.example.breakingbadquotes.model.Quote
+import com.example.breakingbadquotes.ui.states.QuoteApiState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
-    var quoteState: QuoteState by mutableStateOf(QuoteState.Loading)
+    var quoteApiState: QuoteApiState by mutableStateOf(QuoteApiState.Loading)
         private set
 
+    private val _favoriteQuotes = MutableStateFlow<List<Quote>>(emptyList())
+    val favoriteQuotes: StateFlow<List<Quote>> = _favoriteQuotes.asStateFlow()
     init {
+        loadFavoriteQuotes()
         getQuote()
         Log.i("vm inspection", "QuoteViewModel init")
     }
+
+    private fun loadFavoriteQuotes() {
+        viewModelScope.launch {
+            quoteRepository.getFavoriteQuotes().collect { quotes ->
+                _favoriteQuotes.value = quotes
+            }
+        }
+    }
+    fun addFavorite(quote: Quote) {
+        viewModelScope.launch {
+            try {
+                quoteRepository.insertQuote(quote)
+                _favoriteQuotes.value = _favoriteQuotes.value + quote.copy(isFavorite = true)
+            } catch (ex: Exception) {
+                Log.e("QuoteViewModel", ex.message.toString())
+            }
+        }
+    }
+
+    fun removeFavorite(quote: Quote) {
+        viewModelScope.launch {
+            quoteRepository.deleteQuote(quote)
+            _favoriteQuotes.value = _favoriteQuotes.value.filter { it.quote != quote.quote }
+        }
+    }
+
     fun getQuote() {
         viewModelScope.launch {
-            quoteState = try {
-                val quotes = quoteRepository.getQuote() // This is now a List<Quote>
+            quoteApiState = try {
+                val quotes = quoteRepository.getQuote()
                 if (quotes.isNotEmpty()) {
-                    // If the list is not empty, take the first quote
-                    QuoteState.Success(quotes.first())
+                    QuoteApiState.Success(quotes.first())
                 } else {
-                    // Handle the case where the list is empty
-                    QuoteState.Error // You might want to introduce a specific empty state
+                    QuoteApiState.Error
                 }
             } catch (ex: IOException) {
-                QuoteState.NoInternet
+                QuoteApiState.NoInternet
             } catch (e: Exception) {
                 Log.e("QuoteViewModel", e.message.toString())
-                QuoteState.Error
+                QuoteApiState.Error
             }
         }
     }

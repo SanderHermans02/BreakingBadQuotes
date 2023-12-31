@@ -3,5 +3,12 @@
     <string name="app_name_short">BBQ</string>
     <string name="loading">loading...</string>
     <string name="error_message">Something went wrong</string>
-    <string name="no_internet">Walter! U need internet connection, Walter!</string>
+    <string name="no_internet">Walter! U need an internet connection to use this feature, Walter!</string>
+    <string name="get_quote">Generate Quote</string>
+    <string name="add_to_favorites">Add To Favorites</string>
+    <string name="quote_screen_title">Generate A Quote</string>
+    <string name="unfavorite_this_quote">unfavorite this quote</string>
+    <string name="favorite_this_quote">favorite this quote</string>
+    <string name="favorites_screen_title">Favorite Quotes</string>
+    <string name="no_favorites">There are no favorited quotes.</string>
 </resources>
