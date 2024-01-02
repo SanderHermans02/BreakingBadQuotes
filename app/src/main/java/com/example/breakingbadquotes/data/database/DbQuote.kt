@@ -12,6 +12,14 @@ data class DbQuote(
     val isFavorite: Boolean,
 )
 
+fun DbQuote.asDomainQuote(): Quote {
+    return Quote(
+        quote,
+        author,
+        isFavorite,
+    )
+}
+
 fun Quote.asDbQuote(): DbQuote {
     return DbQuote(
         quote = quote,
