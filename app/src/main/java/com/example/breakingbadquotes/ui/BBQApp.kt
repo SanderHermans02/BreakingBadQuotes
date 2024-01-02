@@ -1,8 +1,11 @@
 package com.example.breakingbadquotes.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,38 +19,76 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.ui.components.BBQBottomAppBar
+import com.example.breakingbadquotes.ui.components.BBQNavigationRail
 import com.example.breakingbadquotes.ui.components.BBQTopBar
 import com.example.breakingbadquotes.ui.favoritesScreen.FavoritesScreen
 import com.example.breakingbadquotes.ui.quoteScreen.QuoteScreen
+import com.example.breakingbadquotes.ui.util.QuoteNavigationType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BBQApp() {
-    val navController: NavHostController = rememberNavController()
+fun BBQApp(
+    windowSizeClass: WindowSizeClass,
+    navigationType: QuoteNavigationType,
+    navController: NavHostController = rememberNavController(),
+) {
     val currentBackStack by navController.currentBackStackEntryAsState()
 
     val goToQuotes = { if (canNavigate(currentBackStack, Destinations.Quote.name)) navController.navigate(Destinations.Quote.name) }
     val goToFavorites = { if (canNavigate(currentBackStack, Destinations.Favorites.name)) navController.navigate(Destinations.Favorites.name) }
 
-    Scaffold(
-        containerColor = Color.Transparent,
-        topBar = {
-            BBQTopBar()
-        },
-        bottomBar = {
-            BBQBottomAppBar(goToQuotes, goToFavorites)
-        },
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Destinations.Quote.name,
-            modifier = Modifier.padding(innerPadding).padding(horizontal = dimensionResource(R.dimen.padding_screen_borders)),
-        ) {
-            composable(Destinations.Quote.name) {
-                QuoteScreen()
+    if (navigationType == QuoteNavigationType.BOTTOM_NAVIGATION) {
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                BBQTopBar()
+            },
+            bottomBar = {
+                BBQBottomAppBar(goToQuotes, goToFavorites)
+            },
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Destinations.Quote.name,
+                modifier = Modifier.padding(innerPadding).padding(horizontal = dimensionResource(R.dimen.padding_screen_borders)),
+            ) {
+                composable(Destinations.Quote.name) {
+                    QuoteScreen(windowSizeClass)
+                }
+                composable(Destinations.Favorites.name) {
+                    FavoritesScreen()
+                }
             }
-            composable(Destinations.Favorites.name) {
-                FavoritesScreen()
+        }
+    } else {
+        Row {
+            AnimatedVisibility(visible = navigationType == QuoteNavigationType.NAVIGATION_RAIL) {
+                BBQNavigationRail(
+                    goToQuotes = { if (canNavigate(currentBackStack, Destinations.Quote.name)) navController.navigate(Destinations.Quote.name) },
+                    goToFavorites = { if (canNavigate(currentBackStack, Destinations.Favorites.name)) navController.navigate(Destinations.Favorites.name) },
+                )
+            }
+            Scaffold(
+                topBar = {
+                    BBQTopBar()
+                },
+            ) { innerPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = Destinations.Quote.name,
+                    modifier = Modifier.padding(innerPadding),
+                ) {
+                    composable(
+                        Destinations.Quote.name,
+                    ) {
+                        QuoteScreen(windowSizeClass)
+                    }
+                    composable(
+                        Destinations.Favorites.name,
+                    ) {
+                        FavoritesScreen()
+                    }
+                }
             }
         }
     }
