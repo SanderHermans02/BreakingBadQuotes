@@ -21,10 +21,10 @@ class MainActivity : ComponentActivity() {
                     val windowSize = calculateWindowSizeClass(activity = this)
                     when (windowSize.widthSizeClass) {
                         WindowWidthSizeClass.Compact -> {
-                            BBQApp(windowSize, QuoteNavigationType.BOTTOM_NAVIGATION)
+                            BBQApp(QuoteNavigationType.BOTTOM_NAVIGATION)
                         }
                         else -> {
-                            BBQApp(windowSize, QuoteNavigationType.NAVIGATION_RAIL)
+                            BBQApp(QuoteNavigationType.NAVIGATION_RAIL)
                         }
                     }
                 }

@@ -24,7 +24,17 @@ fun FavoritesScreen() {
     val favoriteQuotes by favoritesViewModel.favoriteQuotes.collectAsState()
     when (uiState) {
         is QuoteDbState.Loading -> {
-            Text(text = stringResource(id = R.string.loading))
+            Column {
+                Text(
+                    text = stringResource(id = R.string.favorites_screen_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)),
+                )
+                Text(
+                    text = stringResource(id = R.string.loading),
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)),
+                )
+            }
         }
         is QuoteDbState.Success -> {
             Column {
@@ -48,13 +58,33 @@ fun FavoritesScreen() {
                         }
                     }
                     else -> {
-                        Text(text = stringResource(id = R.string.error_message))
+                        Column {
+                            Text(
+                                text = stringResource(id = R.string.favorites_screen_title),
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)),
+                            )
+                            Text(
+                                text = stringResource(id = R.string.error_message),
+                                modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)),
+                            )
+                        }
                     }
                 }
             }
         }
         is QuoteDbState.Error -> {
-            Text(text = stringResource(id = R.string.error_message))
+            Column {
+                Text(
+                    text = stringResource(id = R.string.favorites_screen_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)),
+                )
+                Text(
+                    text = stringResource(id = R.string.error_message),
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_space)),
+                )
+            }
         }
     }
 }
