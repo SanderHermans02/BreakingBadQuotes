@@ -7,22 +7,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.ui.components.BBQBottomAppBar
 import com.example.breakingbadquotes.ui.components.BBQNavigationRail
 import com.example.breakingbadquotes.ui.components.BBQTopBar
-import com.example.breakingbadquotes.ui.favoritesScreen.FavoritesScreen
-import com.example.breakingbadquotes.ui.quoteScreen.QuoteScreen
+import com.example.breakingbadquotes.ui.navigation.QuoteOverviewScreen
+import com.example.breakingbadquotes.ui.navigation.navComponent
 import com.example.breakingbadquotes.ui.util.QuoteNavigationType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,10 +25,8 @@ fun BBQApp(
     navigationType: QuoteNavigationType,
     navController: NavHostController = rememberNavController(),
 ) {
-    val currentBackStack by navController.currentBackStackEntryAsState()
-
-    val goToQuotes = { if (canNavigate(currentBackStack, Destinations.Quote.name)) navController.navigate(Destinations.Quote.name) }
-    val goToFavorites = { if (canNavigate(currentBackStack, Destinations.Favorites.name)) navController.navigate(Destinations.Favorites.name) }
+    val goToQuotes: () -> Unit = { navController.popBackStack(QuoteOverviewScreen.Quote.name, inclusive = false) }
+    val goToFavorites = { navController.navigate(QuoteOverviewScreen.Favorites.name) { launchSingleTop = true } }
 
     if (navigationType == QuoteNavigationType.BOTTOM_NAVIGATION) {
         Scaffold(
@@ -47,25 +38,14 @@ fun BBQApp(
                 BBQBottomAppBar(goToQuotes, goToFavorites)
             },
         ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = Destinations.Quote.name,
-                modifier = Modifier.padding(innerPadding).padding(horizontal = dimensionResource(R.dimen.padding_screen_borders)),
-            ) {
-                composable(Destinations.Quote.name) {
-                    QuoteScreen(windowSizeClass)
-                }
-                composable(Destinations.Favorites.name) {
-                    FavoritesScreen()
-                }
-            }
+            navComponent(windowSizeClass, navController, modifier = Modifier.padding(innerPadding))
         }
     } else {
         Row {
             AnimatedVisibility(visible = navigationType == QuoteNavigationType.NAVIGATION_RAIL) {
                 BBQNavigationRail(
-                    goToQuotes = { if (canNavigate(currentBackStack, Destinations.Quote.name)) navController.navigate(Destinations.Quote.name) },
-                    goToFavorites = { if (canNavigate(currentBackStack, Destinations.Favorites.name)) navController.navigate(Destinations.Favorites.name) },
+                    selectedDestination = navController.currentDestination,
+                    onTabPressed = { node: String -> navController.navigate(node) },
                 )
             }
             Scaffold(
@@ -73,34 +53,8 @@ fun BBQApp(
                     BBQTopBar()
                 },
             ) { innerPadding ->
-                NavHost(
-                    navController = navController,
-                    startDestination = Destinations.Quote.name,
-                    modifier = Modifier.padding(innerPadding),
-                ) {
-                    composable(
-                        Destinations.Quote.name,
-                    ) {
-                        QuoteScreen(windowSizeClass)
-                    }
-                    composable(
-                        Destinations.Favorites.name,
-                    ) {
-                        FavoritesScreen()
-                    }
-                }
+                navComponent(windowSizeClass, navController, modifier = Modifier.padding(innerPadding))
             }
         }
     }
-}
-
-enum class Destinations {
-    Quote,
-    Favorites,
-}
-
-private fun canNavigate(current: NavBackStackEntry?, destination: String): Boolean {
-    val currentDest = current?.destination?.route
-
-    return if (current != null) currentDest != destination else true
 }
