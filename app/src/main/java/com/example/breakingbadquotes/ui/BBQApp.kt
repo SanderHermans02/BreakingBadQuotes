@@ -28,7 +28,6 @@ import com.example.breakingbadquotes.ui.util.QuoteNavigationType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BBQApp(
-    windowSizeClass: WindowSizeClass,
     navigationType: QuoteNavigationType,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -53,7 +52,7 @@ fun BBQApp(
                 modifier = Modifier.padding(innerPadding).padding(horizontal = dimensionResource(R.dimen.padding_screen_borders)),
             ) {
                 composable(Destinations.Quote.name) {
-                    QuoteScreen(windowSizeClass)
+                    QuoteScreen()
                 }
                 composable(Destinations.Favorites.name) {
                     FavoritesScreen()
@@ -81,7 +80,7 @@ fun BBQApp(
                     composable(
                         Destinations.Quote.name,
                     ) {
-                        QuoteScreen(windowSizeClass)
+                        QuoteScreen()
                     }
                     composable(
                         Destinations.Favorites.name,
