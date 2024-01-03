@@ -72,6 +72,7 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.test:core-ktx:1.5.0")
+    androidTestImplementation("org.testng:testng:6.9.6")
     // room
     val room_version = "2.5.0"
     implementation("androidx.room:room-runtime:$room_version")
