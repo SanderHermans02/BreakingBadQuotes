@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface QuoteRepository {
-    fun getFavoriteQuotes(): Flow<List<Quote>>
+    suspend fun getFavoriteQuotes(): Flow<List<Quote>>
     suspend fun getQuote(): List<Quote>
 
     suspend fun insertQuote(quote: Quote)
@@ -21,7 +21,7 @@ class CachingQuotesRepository(
     private val quoteDao: QuoteDao,
     private val quoteApiService: QuoteApiService,
 ) : QuoteRepository {
-    override fun getFavoriteQuotes(): Flow<List<Quote>> {
+    override suspend fun getFavoriteQuotes(): Flow<List<Quote>> {
         return quoteDao.getAllItems().map { it.asDomainQuotes() }
     }
 
