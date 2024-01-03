@@ -3,9 +3,10 @@ package com.example.breakingbadquotes
 import com.example.breakingbadquotes.fake.FakeApiQuoteRepository
 import com.example.breakingbadquotes.fake.FakeDataSource
 import com.example.breakingbadquotes.model.Quote
-import com.example.breakingbadquotes.ui.quoteScreen.QuoteViewModel
-import com.example.breakingbadquotes.ui.states.QuoteApiState
+import com.example.breakingbadquotes.ui.favoritesScreen.FavoritesViewModel
+import com.example.breakingbadquotes.ui.states.QuoteDbState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -20,9 +21,8 @@ import org.junit.Test
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
-class QuoteViewModelTest {
-
-    private lateinit var viewModel: QuoteViewModel
+class FavoritesViewModelTest {
+    private lateinit var viewModel: FavoritesViewModel
     private lateinit var fakeRepository: FakeApiQuoteRepository
 
     @get:Rule
@@ -31,38 +31,43 @@ class QuoteViewModelTest {
     @Before
     fun init() {
         fakeRepository = FakeApiQuoteRepository()
-        viewModel = QuoteViewModel(fakeRepository)
+
+        fakeRepository.favoriteQuotes.add(
+            Quote(
+                FakeDataSource.quotes.first().quote,
+                FakeDataSource.quotes.first().author,
+                true,
+            ),
+        )
+        fakeRepository.favoriteQuotes.add(
+            Quote(
+                FakeDataSource.quotes.last().quote,
+                FakeDataSource.quotes.last().author,
+                true,
+            ),
+        )
+
+        viewModel = FavoritesViewModel(fakeRepository)
     }
 
     @Test
-    fun getQuoteTest() = runTest {
-        val expectedQuote = Quote(FakeDataSource.quotes.first().quote, FakeDataSource.quotes.first().author, false)
-        fakeRepository.quotes.add(expectedQuote)
+    fun getFavoriteQuotesTest() = runTest {
+        val state = viewModel.quoteDbState
+        val favoriteQuotes = viewModel.favoriteQuotes.first()
 
-        viewModel.getQuote()
-
-        val state = viewModel.quoteApiState
-        assertTrue(state is QuoteApiState.Success)
-        assertEquals(expectedQuote, (state as QuoteApiState.Success).quote)
-    }
-
-    @Test
-    fun addFavoriteTest() = runTest {
-        val quoteToAdd = Quote(FakeDataSource.quotes.first().quote, FakeDataSource.quotes.first().author, false)
-
-        viewModel.addFavorite(quoteToAdd)
-
-        assertTrue(viewModel.favoriteQuotes.value.any { it == quoteToAdd.copy(isFavorite = true) })
+        assertTrue(state is QuoteDbState.Success)
+        assertEquals(2, favoriteQuotes.size)
     }
 
     @Test
     fun removeFavoriteTest() = runTest {
-        val quoteToRemove = Quote(FakeDataSource.quotes.first().quote, FakeDataSource.quotes.first().author, true)
-        viewModel.addFavorite(quoteToRemove)
+        val initialFavorites = viewModel.favoriteQuotes.value
+        val quoteToRemove = initialFavorites.first()
 
         viewModel.removeFavorite(quoteToRemove)
 
-        assertFalse(viewModel.favoriteQuotes.value.any { it == quoteToRemove })
+        val updatedFavorites = viewModel.favoriteQuotes.value
+        assertFalse(updatedFavorites.contains(quoteToRemove))
     }
 
     class TestDispatcherRule(

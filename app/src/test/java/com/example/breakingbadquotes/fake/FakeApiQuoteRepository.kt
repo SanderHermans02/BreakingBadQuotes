@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeApiQuoteRepository : QuoteRepository {
 
-    private val favoriteQuotes = mutableListOf<Quote>()
+    val favoriteQuotes = mutableListOf<Quote>()
     val quotes = mutableListOf<Quote>()
     override suspend fun getFavoriteQuotes(): Flow<List<Quote>> {
         return flowOf(favoriteQuotes)
@@ -18,10 +18,10 @@ class FakeApiQuoteRepository : QuoteRepository {
     }
 
     override suspend fun insertQuote(quote: Quote) {
-        // do nothing
+        favoriteQuotes.add(quote)
     }
 
     override suspend fun deleteQuote(quote: Quote) {
-        // do nothing
+        favoriteQuotes.remove(quote)
     }
 }

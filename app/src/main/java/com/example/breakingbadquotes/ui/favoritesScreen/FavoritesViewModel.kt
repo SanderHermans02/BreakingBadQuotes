@@ -20,23 +20,12 @@ import kotlinx.coroutines.launch
 
 class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
-    /*lateinit var uiListState: StateFlow<List<Quote>>*/
-
     var quoteDbState: QuoteDbState by mutableStateOf(QuoteDbState.Loading)
         private set
-    /*var listOfQuotes: List<Quote> by mutableStateOf(mutableListOf())
-        private set*/
 
     private val _favoriteQuotes = MutableStateFlow<List<Quote>>(emptyList())
     val favoriteQuotes: StateFlow<List<Quote>> = _favoriteQuotes.asStateFlow()
 
-    /*val favoriteQuotes: StateFlow<List<Quote>> = quoteRepository.getFavoriteQuotes()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-*/
-   /* init {
-        getFavoritesQuotes()
-        Log.i("vm inspection", "FavoritesViewModel init")
-    }*/
     init {
         viewModelScope.launch {
             try {
@@ -49,29 +38,13 @@ class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
                 Log.e("FavoritesViewModel", "Error fetching favorite quotes", e)
             }
         }
-        Log.i("vm inspection", "FavoritesViewModel init")
+        /* Log.i("vm inspection", "FavoritesViewModel init")*/
     }
     fun removeFavorite(quote: Quote) {
         viewModelScope.launch {
             quoteRepository.deleteQuote(quote)
         }
     }
-
-    /*fun getFavoritesQuotes() {
-        viewModelScope.launch {
-            quoteDbState = try {
-                uiListState = quoteRepository.getFavoriteQuotes()
-                    .stateIn(
-                        scope = viewModelScope,
-                        started = SharingStarted.WhileSubscribed(5_000L),
-                        initialValue = listOf(),
-                    )
-                QuoteDbState.Success(listOfQuotes)
-            } catch (e: Exception) {
-                QuoteDbState.Error
-            }
-        }
-    }*/
 
     companion object {
         private var Instance: FavoritesViewModel? = null
