@@ -13,35 +13,51 @@ import com.example.breakingbadquotes.QuoteApplication
 import com.example.breakingbadquotes.data.QuoteRepository
 import com.example.breakingbadquotes.model.Quote
 import com.example.breakingbadquotes.ui.states.QuoteDbState
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
-    lateinit var uiListState: StateFlow<List<Quote>>
+    /*lateinit var uiListState: StateFlow<List<Quote>>*/
 
     var quoteDbState: QuoteDbState by mutableStateOf(QuoteDbState.Loading)
         private set
-    var listOfQuotes: List<Quote> by mutableStateOf(mutableListOf())
-        private set
+    /*var listOfQuotes: List<Quote> by mutableStateOf(mutableListOf())
+        private set*/
 
-    val favoriteQuotes: StateFlow<List<Quote>> = quoteRepository.getFavoriteQuotes()
+    private val _favoriteQuotes = MutableStateFlow<List<Quote>>(emptyList())
+    val favoriteQuotes: StateFlow<List<Quote>> = _favoriteQuotes.asStateFlow()
+
+    /*val favoriteQuotes: StateFlow<List<Quote>> = quoteRepository.getFavoriteQuotes()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
-    init {
+*/
+   /* init {
         getFavoritesQuotes()
         Log.i("vm inspection", "FavoritesViewModel init")
+    }*/
+    init {
+        viewModelScope.launch {
+            try {
+                quoteRepository.getFavoriteQuotes().collect { quotes ->
+                    _favoriteQuotes.value = quotes
+                    quoteDbState = QuoteDbState.Success(quotes)
+                }
+            } catch (e: Exception) {
+                quoteDbState = QuoteDbState.Error
+                Log.e("FavoritesViewModel", "Error fetching favorite quotes", e)
+            }
+        }
+        Log.i("vm inspection", "FavoritesViewModel init")
     }
-
     fun removeFavorite(quote: Quote) {
         viewModelScope.launch {
             quoteRepository.deleteQuote(quote)
         }
     }
 
-    fun getFavoritesQuotes() {
+    /*fun getFavoritesQuotes() {
         viewModelScope.launch {
             quoteDbState = try {
                 uiListState = quoteRepository.getFavoriteQuotes()
@@ -55,7 +71,7 @@ class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
                 QuoteDbState.Error
             }
         }
-    }
+    }*/
 
     companion object {
         private var Instance: FavoritesViewModel? = null
