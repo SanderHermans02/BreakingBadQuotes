@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flowOf
 class FakeApiQuoteRepository : QuoteRepository {
 
     private val favoriteQuotes = mutableListOf<Quote>()
-    private val quotes = mutableListOf<Quote>()
+    val quotes = mutableListOf<Quote>()
     override suspend fun getFavoriteQuotes(): Flow<List<Quote>> {
         return flowOf(favoriteQuotes)
     }

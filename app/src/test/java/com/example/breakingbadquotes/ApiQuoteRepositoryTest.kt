@@ -17,21 +17,15 @@ class ApiQuoteRepositoryTest {
     private lateinit var repository: CachingQuotesRepository
 
     @Before
-    fun setUp() {
-        // Initialize the FakeQuoteApiService before each test
+    fun init() {
         quoteApiService = FakeQuoteApiService()
         val fakeQuoteDao = FakeQuoteDao()
-        // Note: You would also need to create a fake QuoteDao implementation
-        // For this example, we're just focusing on the API part
         repository = CachingQuotesRepository(fakeQuoteDao, quoteApiService)
     }
 
     @Test
     fun getQuotes_returnsExpectedData() = runBlocking {
-        // When we ask the repository for quotes
         val quotes = repository.getQuote()
-
-        // Then the expected data is returned
         assertEquals(FakeDataSource.quotes.map { it.asDomainObjects() }, quotes)
     }
 }

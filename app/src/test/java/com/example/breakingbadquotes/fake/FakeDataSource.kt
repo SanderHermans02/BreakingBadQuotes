@@ -9,7 +9,7 @@ object FakeDataSource {
     val author2 = "Mike Ehrmantraut"
 
     val quotes = listOf(
-        ApiQuote(quote1, author1, true),
+        ApiQuote(quote1, author1, false),
         ApiQuote(quote2, author2, true),
     )
 }
