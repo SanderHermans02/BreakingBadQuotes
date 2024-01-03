@@ -36,6 +36,10 @@ class QuoteDoaTest {
         quoteDao.insert(quote2.asDbQuote())
     }
 
+    private suspend fun deleteOneQuoteFromDb() {
+        quoteDao.delete(quote1.asDbQuote())
+    }
+
     @Before
     fun createDb() {
         val context: Context = ApplicationProvider.getApplicationContext()
@@ -66,5 +70,24 @@ class QuoteDoaTest {
         val allItems = quoteDao.getAllItems().first()
         assertEquals(allItems[0].asDomainQuote().quote, quote1.quote)
         assertEquals(allItems[1].asDomainQuote().quote, quote2.quote)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoDelete_deleteQuoteFromDB() = runBlocking {
+        addOneQuoteToDb()
+        deleteOneQuoteFromDb()
+        val allItems = quoteDao.getAllItems().first()
+        assertEquals(allItems.size, 0)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoDelete_deleteQuoteFromDBWithTwoQuotes() = runBlocking {
+        addTwoQuotesToDb()
+        deleteOneQuoteFromDb()
+        val allItems = quoteDao.getAllItems().first()
+        assertEquals(allItems.size, 1)
+        assertEquals(allItems[0].asDomainQuote().quote, quote2.quote)
     }
 }

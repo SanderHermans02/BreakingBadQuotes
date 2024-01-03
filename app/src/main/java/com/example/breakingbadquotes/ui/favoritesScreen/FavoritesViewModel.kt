@@ -13,47 +13,36 @@ import com.example.breakingbadquotes.QuoteApplication
 import com.example.breakingbadquotes.data.QuoteRepository
 import com.example.breakingbadquotes.model.Quote
 import com.example.breakingbadquotes.ui.states.QuoteDbState
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
-    lateinit var uiListState: StateFlow<List<Quote>>
-
     var quoteDbState: QuoteDbState by mutableStateOf(QuoteDbState.Loading)
         private set
-    var listOfQuotes: List<Quote> by mutableStateOf(mutableListOf())
-        private set
 
-    val favoriteQuotes: StateFlow<List<Quote>> = quoteRepository.getFavoriteQuotes()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    private val _favoriteQuotes = MutableStateFlow<List<Quote>>(emptyList())
+    val favoriteQuotes: StateFlow<List<Quote>> = _favoriteQuotes.asStateFlow()
 
     init {
-        getFavoritesQuotes()
-        Log.i("vm inspection", "FavoritesViewModel init")
+        viewModelScope.launch {
+            try {
+                quoteRepository.getFavoriteQuotes().collect { quotes ->
+                    _favoriteQuotes.value = quotes
+                    quoteDbState = QuoteDbState.Success(quotes)
+                }
+            } catch (e: Exception) {
+                quoteDbState = QuoteDbState.Error
+                Log.e("FavoritesViewModel", "Error fetching favorite quotes", e)
+            }
+        }
+        /* Log.i("vm inspection", "FavoritesViewModel init")*/
     }
-
     fun removeFavorite(quote: Quote) {
         viewModelScope.launch {
             quoteRepository.deleteQuote(quote)
-        }
-    }
-
-    fun getFavoritesQuotes() {
-        viewModelScope.launch {
-            quoteDbState = try {
-                uiListState = quoteRepository.getFavoriteQuotes()
-                    .stateIn(
-                        scope = viewModelScope,
-                        started = SharingStarted.WhileSubscribed(5_000L),
-                        initialValue = listOf(),
-                    )
-                QuoteDbState.Success(listOfQuotes)
-            } catch (e: Exception) {
-                QuoteDbState.Error
-            }
         }
     }
 

@@ -30,7 +30,7 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
     init {
         loadFavoriteQuotes()
         getQuote()
-        Log.i("vm inspection", "QuoteViewModel init")
+        /*Log.i("vm inspection", "QuoteViewModel init")*/
     }
 
     private fun loadFavoriteQuotes() {

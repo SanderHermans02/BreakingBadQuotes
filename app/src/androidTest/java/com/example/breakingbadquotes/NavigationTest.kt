@@ -45,4 +45,20 @@ class NavigationTest() {
             .onNodeWithText("Favorite Quotes")
             .assertIsDisplayed()
     }
+
+    @Test
+    fun navigateToFavoritesAndBack() {
+        composeTestRule
+            .onNodeWithContentDescription("navigate to favorited quotes")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Favorite Quotes")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("navigate to quote generator")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Generate A Quote")
+            .assertIsDisplayed()
+    }
 }
