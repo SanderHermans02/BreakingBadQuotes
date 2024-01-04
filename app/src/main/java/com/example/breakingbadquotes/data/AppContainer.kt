@@ -11,12 +11,23 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
+/**
+ * Interface for the app's dependency container, which provides access to the repository.
+ */
 interface AppContainer {
+    /**
+     * A repository for handling quote data operations.
+     */
     val quoteRepository: QuoteRepository
 }
 
+/**
+ * The default implementation of [AppContainer] that sets up the application's dependencies.
+ * It includes the initialization of network components, the Retrofit service, and the Room database.
+ *
+ * @property applicationContext The context of the application used to initialize various components.
+ */
 class DefaultAppContainer(applicationContext: Context) : AppContainer {
-
     private val networkCheck = NetworkConnectionInterceptor(applicationContext)
     private val client = OkHttpClient.Builder()
         .addInterceptor(networkCheck)
@@ -35,10 +46,6 @@ class DefaultAppContainer(applicationContext: Context) : AppContainer {
         retrofit.create(QuoteApiService::class.java)
     }
 
-    /*override val quoteRepository: QuoteRepository by lazy {
-        ApiQuoteRepository(retrofitService)
-    }*/
-
     private val quoteDatabase: QuoteDb by lazy {
         Room.databaseBuilder(
             applicationContext,
@@ -47,8 +54,11 @@ class DefaultAppContainer(applicationContext: Context) : AppContainer {
         ).build()
     }
 
+    /**
+     * Provides a singleton instance of [QuoteRepository] that is lazily initialized.
+     * It uses a [CachingQuotesRepository] to provide caching functionality for quotes.
+     */
     override val quoteRepository: QuoteRepository by lazy {
-//        ApiTasksRepository(retrofitService)
         CachingQuotesRepository(quoteDatabase.quoteDao(), retrofitService)
     }
 }

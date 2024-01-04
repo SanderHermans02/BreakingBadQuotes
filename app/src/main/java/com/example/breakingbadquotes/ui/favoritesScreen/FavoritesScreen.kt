@@ -17,11 +17,21 @@ import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.ui.components.QuoteItem
 import com.example.breakingbadquotes.ui.states.QuoteDbState
 
+/**
+ * Composable function that displays the favorites screen within the Breaking Bad Quotes application.
+ * It presents a list of quotes marked as favorites by the user. The screen updates according
+ * to the UI state, showing a loading indicator, the list of favorite quotes, or an error message.
+ */
 @Composable
 fun FavoritesScreen() {
+    // ViewModel for managing favorite quotes data and interactions
     val favoritesViewModel: FavoritesViewModel = viewModel(factory = FavoritesViewModel.Factory)
+    // UI state observed from the ViewModel
     val uiState = favoritesViewModel.quoteDbState
+    // List of favorite quotes, observed from the ViewModel
     val favoriteQuotes by favoritesViewModel.favoriteQuotes.collectAsState()
+
+    // UI state handling to display Loading, Success, or Error
     when (uiState) {
         is QuoteDbState.Loading -> {
             Column {

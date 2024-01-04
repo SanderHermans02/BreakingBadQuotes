@@ -9,7 +9,22 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
+/**
+ * An [Interceptor] for monitoring network availability before proceeding with network requests.
+ * This class checks if there is an active network connection before allowing an HTTP request to proceed.
+ * If no connection is available, it throws an [IOException], effectively canceling the request.
+ *
+ * @property context The context used for checking network connectivity status.
+ */
 class NetworkConnectionInterceptor(val context: Context) : Interceptor {
+    /**
+     * Intercepts the outgoing request and checks for network connectivity.
+     * If the device is not connected to the internet, it logs the information and throws an [IOException].
+     *
+     * @param chain The chain of requests to be intercepted.
+     * @return [Response] The response from the chain if the device is connected to the internet.
+     * @throws IOException if there is no network connectivity.
+     */
     override fun intercept(chain: Interceptor.Chain): Response = chain.run {
         if (!isConnected(context=context)) {
             Log.i("retrofit", "there is no connection")
@@ -20,6 +35,12 @@ class NetworkConnectionInterceptor(val context: Context) : Interceptor {
         }
     }
 
+    /**
+     * Checks for network connectivity.
+     *
+     * @param context The context used for accessing the [ConnectivityManager].
+     * @return Boolean Returns true if the device is connected to the internet, false otherwise.
+     */
     fun isConnected(context: Context): Boolean {
         var result = false
         val connectivityManager =
