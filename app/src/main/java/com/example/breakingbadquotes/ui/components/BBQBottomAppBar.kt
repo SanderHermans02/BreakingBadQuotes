@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.example.breakingbadquotes.R
+import com.example.breakingbadquotes.ui.navigation.Page
 
 /**
  * Composable function that creates a bottom app bar for the Breaking Bad Quotes application.
@@ -63,10 +64,4 @@ fun BBQBottomAppBar(currentActivePage: Page, goToQuotes: () -> Unit, goToFavorit
     )
 }
 
-/**
- * Enum representing the different pages in the application.
- */
-enum class Page {
-    QUOTES,
-    FAVORITES,
-}
+

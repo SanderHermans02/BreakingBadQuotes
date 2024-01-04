@@ -20,8 +20,8 @@ import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.ui.components.BBQBottomAppBar
 import com.example.breakingbadquotes.ui.components.BBQNavigationRail
 import com.example.breakingbadquotes.ui.components.BBQTopBar
-import com.example.breakingbadquotes.ui.components.Page
 import com.example.breakingbadquotes.ui.favoritesScreen.FavoritesScreen
+import com.example.breakingbadquotes.ui.navigation.Page
 import com.example.breakingbadquotes.ui.quoteScreen.QuoteScreen
 import com.example.breakingbadquotes.ui.util.QuoteNavigationType
 
@@ -76,6 +76,7 @@ fun BBQApp(
         Row {
             AnimatedVisibility(visible = navigationType == QuoteNavigationType.NAVIGATION_RAIL) {
                 BBQNavigationRail(
+                    currentActivePage = currentPage,
                     goToQuotes = { if (canNavigate(currentBackStack, Destinations.Quote.name)) navController.navigate(Destinations.Quote.name) },
                     goToFavorites = { if (canNavigate(currentBackStack, Destinations.Favorites.name)) navController.navigate(Destinations.Favorites.name) },
                 )
