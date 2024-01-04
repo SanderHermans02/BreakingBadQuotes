@@ -54,16 +54,10 @@ $dokka.location:com.example.breakingbadquotes.network/NetworkConnectionIntercept
 $dokka.location:com.example.breakingbadquotes.network/QuoteApiService///PointingToDeclaration/app/com.example.breakingbadquotes.network/-quote-api-service/index.html
 $dokka.location:com.example.breakingbadquotes.network/QuoteApiService/getQuotes/#/PointingToDeclaration/app/com.example.breakingbadquotes.network/-quote-api-service/get-quotes.html
 $dokka.location:com.example.breakingbadquotes.ui.components////PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/index.html
-$dokka.location:com.example.breakingbadquotes.ui.components//BBQBottomAppBar/#com.example.breakingbadquotes.ui.components.Page#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-b-b-q-bottom-app-bar.html
-$dokka.location:com.example.breakingbadquotes.ui.components//BBQNavigationRail/#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-b-b-q-navigation-rail.html
+$dokka.location:com.example.breakingbadquotes.ui.components//BBQBottomAppBar/#com.example.breakingbadquotes.ui.navigation.Page#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-b-b-q-bottom-app-bar.html
+$dokka.location:com.example.breakingbadquotes.ui.components//BBQNavigationRail/#com.example.breakingbadquotes.ui.navigation.Page#kotlin.Function0[kotlin.Unit]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-b-b-q-navigation-rail.html
 $dokka.location:com.example.breakingbadquotes.ui.components//BBQTopBar/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-b-b-q-top-bar.html
 $dokka.location:com.example.breakingbadquotes.ui.components//QuoteItem/#com.example.breakingbadquotes.model.Quote#kotlin.Boolean#kotlin.Function1[com.example.breakingbadquotes.model.Quote,kotlin.Unit]#androidx.compose.ui.Modifier/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-quote-item.html
-$dokka.location:com.example.breakingbadquotes.ui.components/Page.FAVORITES///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}app/com.example.breakingbadquotes.ui.components/-page/-f-a-v-o-r-i-t-e-s/index.html
-$dokka.location:com.example.breakingbadquotes.ui.components/Page.QUOTES///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}app/com.example.breakingbadquotes.ui.components/-page/-q-u-o-t-e-s/index.html
-$dokka.location:com.example.breakingbadquotes.ui.components/Page///PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-page/index.html
-$dokka.location:com.example.breakingbadquotes.ui.components/Page/entries/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-page/entries.html
-$dokka.location:com.example.breakingbadquotes.ui.components/Page/valueOf/#kotlin.String/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-page/value-of.html
-$dokka.location:com.example.breakingbadquotes.ui.components/Page/values/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.components/-page/values.html
 $dokka.location:com.example.breakingbadquotes.ui.favoritesScreen////PointingToDeclaration/app/com.example.breakingbadquotes.ui.favoritesScreen/index.html
 $dokka.location:com.example.breakingbadquotes.ui.favoritesScreen//FavoritesScreen/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.favoritesScreen/-favorites-screen.html
 $dokka.location:com.example.breakingbadquotes.ui.favoritesScreen/FavoritesViewModel.Companion///PointingToDeclaration/app/com.example.breakingbadquotes.ui.favoritesScreen/-favorites-view-model/-companion/index.html
@@ -74,6 +68,13 @@ $dokka.location:com.example.breakingbadquotes.ui.favoritesScreen/FavoritesViewMo
 $dokka.location:com.example.breakingbadquotes.ui.favoritesScreen/FavoritesViewModel/quoteDbState/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.favoritesScreen/-favorites-view-model/quote-db-state.html
 $dokka.location:com.example.breakingbadquotes.ui.favoritesScreen/FavoritesViewModel/quoteRepository/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.favoritesScreen/-favorites-view-model/quote-repository.html
 $dokka.location:com.example.breakingbadquotes.ui.favoritesScreen/FavoritesViewModel/removeFavorite/#com.example.breakingbadquotes.model.Quote/PointingToDeclaration/app/com.example.breakingbadquotes.ui.favoritesScreen/-favorites-view-model/remove-favorite.html
+$dokka.location:com.example.breakingbadquotes.ui.navigation////PointingToDeclaration/app/com.example.breakingbadquotes.ui.navigation/index.html
+$dokka.location:com.example.breakingbadquotes.ui.navigation/Page.FAVORITES///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}app/com.example.breakingbadquotes.ui.navigation/-page/-f-a-v-o-r-i-t-e-s/index.html
+$dokka.location:com.example.breakingbadquotes.ui.navigation/Page.QUOTES///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}app/com.example.breakingbadquotes.ui.navigation/-page/-q-u-o-t-e-s/index.html
+$dokka.location:com.example.breakingbadquotes.ui.navigation/Page///PointingToDeclaration/app/com.example.breakingbadquotes.ui.navigation/-page/index.html
+$dokka.location:com.example.breakingbadquotes.ui.navigation/Page/entries/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.navigation/-page/entries.html
+$dokka.location:com.example.breakingbadquotes.ui.navigation/Page/valueOf/#kotlin.String/PointingToDeclaration/app/com.example.breakingbadquotes.ui.navigation/-page/value-of.html
+$dokka.location:com.example.breakingbadquotes.ui.navigation/Page/values/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.navigation/-page/values.html
 $dokka.location:com.example.breakingbadquotes.ui.quoteScreen////PointingToDeclaration/app/com.example.breakingbadquotes.ui.quoteScreen/index.html
 $dokka.location:com.example.breakingbadquotes.ui.quoteScreen//QuoteScreen/#/PointingToDeclaration/app/com.example.breakingbadquotes.ui.quoteScreen/-quote-screen.html
 $dokka.location:com.example.breakingbadquotes.ui.quoteScreen/QuoteViewModel.Companion///PointingToDeclaration/app/com.example.breakingbadquotes.ui.quoteScreen/-quote-view-model/-companion/index.html
@@ -189,6 +190,7 @@ com.example.breakingbadquotes.network
 com.example.breakingbadquotes.ui
 com.example.breakingbadquotes.ui.components
 com.example.breakingbadquotes.ui.favoritesScreen
+com.example.breakingbadquotes.ui.navigation
 com.example.breakingbadquotes.ui.quoteScreen
 com.example.breakingbadquotes.ui.states
 com.example.breakingbadquotes.ui.theme
