@@ -22,15 +22,26 @@ import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.ui.components.QuoteItem
 import com.example.breakingbadquotes.ui.states.QuoteApiState
 
+/**
+ * Composable function that displays the quote screen for the Breaking Bad Quotes application.
+ * It observes the UI state for quotes and manages the display of quotes, loading indicators,
+ * or error messages accordingly. This screen also handles user interactions to fetch new quotes
+ * and to mark quotes as favorites.
+ */
 @Composable
 fun QuoteScreen() {
+    // ViewModel for managing quote data and interactions
     val quoteViewModel: QuoteViewModel = viewModel(factory = QuoteViewModel.Factory)
+    // State holder for favorite quotes, observed from the ViewModel
     val favoriteQuotes by quoteViewModel.favoriteQuotes.collectAsState()
+    // The current UI state that dictates the content display
     val uiState = quoteViewModel.quoteApiState
 
+    // Constraints for adaptive UI based on screen size
     BoxWithConstraints {
         val maxWidth = maxWidth
         val isCompact = maxWidth < dimensionResource(id = R.dimen.min_width)
+        // Handle UI state to show Loading, Success, Error, or No Internet message
         when (uiState) {
             is QuoteApiState.Loading -> {
                 Column {
@@ -48,6 +59,8 @@ fun QuoteScreen() {
             is QuoteApiState.Success -> {
                 val isCurrentQuoteFavorite = favoriteQuotes.any { it.quote == uiState.quote.quote }
 
+                // Display the successful retrieval of a quote
+                // Handle compact and expanded screen layouts
                 if (isCompact) {
                     Column(
                         modifier = Modifier.fillMaxSize(),

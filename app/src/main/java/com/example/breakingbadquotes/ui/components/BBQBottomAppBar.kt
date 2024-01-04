@@ -18,8 +18,17 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.example.breakingbadquotes.R
 
+/**
+ * Composable function that creates a bottom app bar for the Breaking Bad Quotes application.
+ * It contains navigation icons to switch between different pages of the app.
+ *
+ * @param currentActivePage Indicates the current active page in the app.
+ * @param goToQuotes Function to be invoked when the quotes icon is clicked.
+ * @param goToFavorites Function to be invoked when the favorites icon is clicked.
+ */
 @Composable
 fun BBQBottomAppBar(currentActivePage: Page, goToQuotes: () -> Unit, goToFavorites: () -> Unit) {
+    // BottomAppBar implementation with IconButton for quotes and favorites
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.primary,
@@ -54,6 +63,9 @@ fun BBQBottomAppBar(currentActivePage: Page, goToQuotes: () -> Unit, goToFavorit
     )
 }
 
+/**
+ * Enum representing the different pages in the application.
+ */
 enum class Page {
     QUOTES,
     FAVORITES,

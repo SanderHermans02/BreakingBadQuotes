@@ -20,8 +20,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+/**
+ * ViewModel responsible for managing quote data for the UI layer.
+ * It handles the retrieval of quotes, maintaining a list of favorite quotes, and updating the UI state.
+ *
+ * @property quoteRepository The repository that this ViewModel will use to perform data operations.
+ */
 class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
+    /**
+     * Represents the current state of the quote API call.
+     * UI components can observe this state and change their state accordingly.
+     */
     var quoteApiState: QuoteApiState by mutableStateOf(QuoteApiState.Loading)
         private set
 
@@ -30,9 +40,11 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
     init {
         loadFavoriteQuotes()
         getQuote()
-        /*Log.i("vm inspection", "QuoteViewModel init")*/
     }
 
+    /**
+     * Loads favorite quotes from the repository and updates the UI state.
+     */
     private fun loadFavoriteQuotes() {
         viewModelScope.launch {
             quoteRepository.getFavoriteQuotes().collect { quotes ->
@@ -40,6 +52,12 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
             }
         }
     }
+
+    /**
+     * Adds a quote to the list of favorites.
+     *
+     * @param quote The quote to be added to favorites.
+     */
     fun addFavorite(quote: Quote) {
         viewModelScope.launch {
             try {
@@ -51,6 +69,11 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
         }
     }
 
+    /**
+     * Removes a quote from the list of favorites.
+     *
+     * @param quote The quote to be removed from favorites.
+     */
     fun removeFavorite(quote: Quote) {
         viewModelScope.launch {
             quoteRepository.deleteQuote(quote)
@@ -58,6 +81,9 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
         }
     }
 
+    /**
+     * Fetches a random quote and updates the UI state.
+     */
     fun getQuote() {
         viewModelScope.launch {
             quoteApiState = try {
@@ -77,7 +103,13 @@ class QuoteViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
     }
 
     companion object {
+        // Ensures a single instance of QuoteViewModel is used throughout the app
         private var Instance: QuoteViewModel? = null
+
+        /**
+         * Factory for creating instances of [QuoteViewModel].
+         * Ensures that [QuoteViewModel] is a singleton by reusing the existing instance.
+         */
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 if (Instance == null) {

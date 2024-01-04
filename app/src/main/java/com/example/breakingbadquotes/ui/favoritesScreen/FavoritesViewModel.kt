@@ -18,8 +18,19 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel responsible for managing the state and data for the favorites screen.
+ * It handles the interactions related to the favorite quotes such as fetching from
+ * and removing quotes from the repository.
+ *
+ * @property quoteRepository The repository through which favorite quotes operations are performed.
+ */
 class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
 
+    /**
+     * Represents the current state of the favorite quotes database operations.
+     * UI components can observe this state to update their presentations accordingly.
+     */
     var quoteDbState: QuoteDbState by mutableStateOf(QuoteDbState.Loading)
         private set
 
@@ -27,6 +38,7 @@ class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
     val favoriteQuotes: StateFlow<List<Quote>> = _favoriteQuotes.asStateFlow()
 
     init {
+        // Fetch favorite quotes on initialization
         viewModelScope.launch {
             try {
                 quoteRepository.getFavoriteQuotes().collect { quotes ->
@@ -38,8 +50,13 @@ class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
                 Log.e("FavoritesViewModel", "Error fetching favorite quotes", e)
             }
         }
-        /* Log.i("vm inspection", "FavoritesViewModel init")*/
     }
+
+    /**
+     * Removes a quote from the list of favorite quotes.
+     *
+     * @param quote The quote to be removed from favorites.
+     */
     fun removeFavorite(quote: Quote) {
         viewModelScope.launch {
             quoteRepository.deleteQuote(quote)
@@ -47,7 +64,13 @@ class FavoritesViewModel(val quoteRepository: QuoteRepository) : ViewModel() {
     }
 
     companion object {
+        // Ensures a single instance of FavoritesViewModel is used throughout the app
         private var Instance: FavoritesViewModel? = null
+
+        /**
+         * Factory for creating instances of [FavoritesViewModel].
+         * This ensures that [FavoritesViewModel] reuses the existing instance if available.
+         */
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 if (Instance == null) {

@@ -25,6 +25,12 @@ import com.example.breakingbadquotes.ui.favoritesScreen.FavoritesScreen
 import com.example.breakingbadquotes.ui.quoteScreen.QuoteScreen
 import com.example.breakingbadquotes.ui.util.QuoteNavigationType
 
+/**
+ * Main application composable that sets up the navigation and UI structure based on the navigation type.
+ *
+ * @param navigationType Determines the type of navigation UI to be used, either bottom navigation or navigation rail.
+ * @param navController The navigation controller for navigating between composable screens. By default, it uses a new rememberNavController.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BBQApp(
@@ -42,6 +48,7 @@ fun BBQApp(
     val goToQuotes = { if (canNavigate(currentBackStack, Destinations.Quote.name)) navController.navigate(Destinations.Quote.name) }
     val goToFavorites = { if (canNavigate(currentBackStack, Destinations.Favorites.name)) navController.navigate(Destinations.Favorites.name) }
 
+    // Navigation setup using either bottom navigation or navigation rail based on the navigation type
     if (navigationType == QuoteNavigationType.BOTTOM_NAVIGATION) {
         Scaffold(
             containerColor = Color.Transparent,
@@ -99,11 +106,21 @@ fun BBQApp(
     }
 }
 
+/**
+ * Represents the navigation destinations within the app.
+ */
 enum class Destinations {
     Quote,
     Favorites,
 }
 
+/**
+ * Checks whether navigation to a different destination is possible from the current navigation stack.
+ *
+ * @param current The current navigation back stack entry.
+ * @param destination The destination route to navigate to.
+ * @return Boolean indicating whether navigation to the destination is possible.
+ */
 private fun canNavigate(current: NavBackStackEntry?, destination: String): Boolean {
     val currentDest = current?.destination?.route
 

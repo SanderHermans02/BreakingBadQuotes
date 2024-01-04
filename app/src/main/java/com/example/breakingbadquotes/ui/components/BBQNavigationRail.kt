@@ -14,11 +14,20 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.example.breakingbadquotes.R
 
+/**
+ * Composable function that creates a navigation rail for the Breaking Bad Quotes application.
+ * It provides navigation items for quotes and favorites. This component is typically used
+ * for larger screen sizes where a navigation rail is more suitable than a bottom navigation bar.
+ *
+ * @param goToQuotes Function to be invoked when the quotes navigation item is clicked.
+ * @param goToFavorites Function to be invoked when the favorites navigation item is clicked.
+ */
 @Composable
 fun BBQNavigationRail(goToQuotes: () -> Unit, goToFavorites: () -> Unit) {
     NavigationRail(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
     ) {
+        // NavigationRailItem for Quotes
         NavigationRailItem(
             selected = false,
             onClick = goToQuotes,
@@ -31,6 +40,7 @@ fun BBQNavigationRail(goToQuotes: () -> Unit, goToFavorites: () -> Unit) {
                 )
             },
         )
+        // NavigationRailItem for Favorites
         NavigationRailItem(
             selected = false,
             onClick = goToFavorites,

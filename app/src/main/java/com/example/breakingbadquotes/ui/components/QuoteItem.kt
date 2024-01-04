@@ -22,14 +22,26 @@ import androidx.compose.ui.res.stringResource
 import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.model.Quote
 
+/**
+ * Composable function that creates a card item displaying a quote.
+ * It shows the quote text and author, along with an icon to mark the quote as favorite.
+ * The favorite state of the quote can be toggled by clicking the icon.
+ *
+ * @param quote The quote to be displayed in this card.
+ * @param isFavorite Indicates whether the quote is marked as a favorite.
+ * @param onFavoriteClick Function to be invoked when the favorite icon is clicked.
+ * @param modifier Modifier to be applied to the card (optional).
+ */
 @Composable
 fun QuoteItem(quote: Quote, isFavorite: Boolean, onFavoriteClick: (Quote) -> Unit, modifier: Modifier = Modifier) {
     Card(
+        // Card appearance configuration
         elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(id = R.dimen.card_elevation)),
         modifier = Modifier
             .padding(dimensionResource(id = R.dimen.card_space)),
     ) {
         Column(
+            // Layout configuration and content
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
