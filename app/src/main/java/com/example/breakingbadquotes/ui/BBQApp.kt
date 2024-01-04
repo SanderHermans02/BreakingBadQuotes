@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,6 +20,7 @@ import com.example.breakingbadquotes.R
 import com.example.breakingbadquotes.ui.components.BBQBottomAppBar
 import com.example.breakingbadquotes.ui.components.BBQNavigationRail
 import com.example.breakingbadquotes.ui.components.BBQTopBar
+import com.example.breakingbadquotes.ui.components.Page
 import com.example.breakingbadquotes.ui.favoritesScreen.FavoritesScreen
 import com.example.breakingbadquotes.ui.quoteScreen.QuoteScreen
 import com.example.breakingbadquotes.ui.util.QuoteNavigationType
@@ -32,6 +32,12 @@ fun BBQApp(
     navController: NavHostController = rememberNavController(),
 ) {
     val currentBackStack by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStack?.destination?.route
+    val currentPage = when (currentRoute) {
+        Destinations.Quote.name -> Page.QUOTES
+        Destinations.Favorites.name -> Page.FAVORITES
+        else -> Page.QUOTES
+    }
 
     val goToQuotes = { if (canNavigate(currentBackStack, Destinations.Quote.name)) navController.navigate(Destinations.Quote.name) }
     val goToFavorites = { if (canNavigate(currentBackStack, Destinations.Favorites.name)) navController.navigate(Destinations.Favorites.name) }
@@ -43,7 +49,7 @@ fun BBQApp(
                 BBQTopBar()
             },
             bottomBar = {
-                BBQBottomAppBar(goToQuotes, goToFavorites)
+                BBQBottomAppBar(currentPage, goToQuotes, goToFavorites)
             },
         ) { innerPadding ->
             NavHost(
